@@ -2,7 +2,8 @@ import fs from 'fs'
 import { SaveData } from './src/savedata.js'
 
 const readFileSyncPS = performance.now()
-const sl2Buffer = fs.readFileSync('../tools-and-resources/ER0000-amrt.sl2')
+const sl2Buffer = fs.readFileSync('../tools-and-resources/ER0000-1461.sl2')
+// const sl2Buffer = fs.readFileSync('../tools-and-resources/ER0000-amrt.sl2')
 const readFileSyncPE = performance.now()
 console.log('readFileSync time = ' + (readFileSyncPE - readFileSyncPS) + 'ms')
 

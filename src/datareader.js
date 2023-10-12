@@ -3,8 +3,6 @@ class DataReader {
         this.data = new Uint8Array(data);
         this.view = new DataView(data);
         this.offset = 0;
-        this.lookup = [];
-        this.missedLookup = [];
     }
 
     read(len, consume = true) {

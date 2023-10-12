@@ -135,79 +135,79 @@ class DataReader {
 
     readInventoryItem() {
         let ret = {};
+        this.seek(0xC, true) // DOGE SKIP SHIT
+        // let bytes = this.read(4, false);
+        // ret.hex = buf2hex(bytes.buffer);
+        // Object.defineProperty(ret, 'hex', { enumerable: false });
 
-        let bytes = this.read(4, false);
-        ret.hex = buf2hex(bytes.buffer);
-        Object.defineProperty(ret, 'hex', { enumerable: false });
+        // if ((bytes[3] == 0xC0 || bytes[3] == 0x80 || bytes[3] == 0x90)) {
+        //     ret.lookup = {};
+        //     ret.lookup.id = this.readUint16();
+        //     ret.lookup.unk = this.readUint8();
+        //     Object.defineProperty(ret, 'lookup', { enumerable: false });
+        //     ret.lookup.type = this.readUint8();
 
-        if ((bytes[3] == 0xC0 || bytes[3] == 0x80 || bytes[3] == 0x90)) {
-            ret.lookup = {};
-            ret.lookup.id = this.readUint16();
-            ret.lookup.unk = this.readUint8();
-            Object.defineProperty(ret, 'lookup', { enumerable: false });
-            ret.lookup.type = this.readUint8();
+        //     // ret.lookupEntry = this.lookup[ret.lookup.id];
+        //     // Object.defineProperty(ret, 'lookupEntry', { enumerable: false });
+        //     // ret.id = ret.lookupEntry.id;
+        // } else {
+        //     ret.id = this.readInt32NoCategory();
+        // }
+        // ret.qty = this.readInt32();
+        // ret.handle = this.readUint32();
+        // Object.defineProperty(ret, 'handle', { enumerable: false });
 
-            // ret.lookupEntry = this.lookup[ret.lookup.id];
-            // Object.defineProperty(ret, 'lookupEntry', { enumerable: false });
-            // ret.id = ret.lookupEntry.id;
-        } else {
-            ret.id = this.readInt32NoCategory();
-        }
-        ret.qty = this.readInt32();
-        ret.handle = this.readUint32();
-        Object.defineProperty(ret, 'handle', { enumerable: false });
+        // if (bytes[3] == 0x80) {
+        //     ret.type = "weapon";
+        //     // ret.base = Math.trunc(ret.id / 10000) * 10000;
+        //     // ret.level = ret.id % 100;
 
-        if (bytes[3] == 0x80) {
-            ret.type = "weapon";
-            ret.base = Math.trunc(ret.id / 10000) * 10000;
-            ret.level = ret.id % 100;
+        //     // ret.infusion = Math.trunc((ret.id % 10000) / 100);
 
-            ret.infusion = Math.trunc((ret.id % 10000) / 100);
+        //     // let weaponId = Math.trunc(ret.id / 100) * 100;
+        //     // ret.params = weapons.find(weapon => weapon.RowID == weaponId);
 
-            // let weaponId = Math.trunc(ret.id / 100) * 100;
-            // ret.params = weapons.find(weapon => weapon.RowID == weaponId);
+        //     // if (ret.lookupEntry.ashLookup) {
+        //     // ret.ashLookup = this.lookup[ret.lookupEntry.ashLookup];
+        //     // ret.socketedAsh = ashofwar.find(ash => ash.RowID == ret.ashLookup.id);
+        //     // Object.defineProperty(ret, 'socketedAsh', { enumerable: false });
+        //     // }
 
-            // if (ret.lookupEntry.ashLookup) {
-            // ret.ashLookup = this.lookup[ret.lookupEntry.ashLookup];
-            // ret.socketedAsh = ashofwar.find(ash => ash.RowID == ret.ashLookup.id);
-            // Object.defineProperty(ret, 'socketedAsh', { enumerable: false });
-            // }
+        //     // if (textLookup.weapon[weaponId])
+        //     // ret.text = textLookup.weapon[weaponId];
+        // }
+        // if (bytes[3] == 0x90) {
+        //     ret.type = "armor";
+        //     // ret.params = armor.find(armor => armor.RowID == ret.id);
 
-            // if (textLookup.weapon[weaponId])
-            // ret.text = textLookup.weapon[weaponId];
-        }
-        if (bytes[3] == 0x90) {
-            ret.type = "armor";
-            // ret.params = armor.find(armor => armor.RowID == ret.id);
+        //     // if (textLookup.armor[ret.id])
+        //     // ret.text = textLookup.armor[ret.id];
+        // }
+        // if (bytes[3] == 0xA0) {
+        //     ret.type = "talisman";
+        //     // ret.params = talismans.find(talisman => talisman.RowID == ret.id);
 
-            // if (textLookup.armor[ret.id])
-            // ret.text = textLookup.armor[ret.id];
-        }
-        if (bytes[3] == 0xA0) {
-            ret.type = "talisman";
-            // ret.params = talismans.find(talisman => talisman.RowID == ret.id);
+        //     // if (textLookup.talisman[ret.id])
+        //     // ret.text = textLookup.talisman[ret.id];
+        // }
+        // if (bytes[3] == 0xB0) {
+        //     ret.type = "goods";
+        //     // ret.params = goods.find(good => good.RowID == ret.id);
+        //     // if (ret.params && (ret.params.goodsType == 7 || ret.params.goodsType == 8))
+        //     // ret.base = Math.trunc(ret.id / 100) * 100;
 
-            // if (textLookup.talisman[ret.id])
-            // ret.text = textLookup.talisman[ret.id];
-        }
-        if (bytes[3] == 0xB0) {
-            ret.type = "goods";
-            // ret.params = goods.find(good => good.RowID == ret.id);
-            // if (ret.params && (ret.params.goodsType == 7 || ret.params.goodsType == 8))
-            // ret.base = Math.trunc(ret.id / 100) * 100;
+        //     // if (textLookup.good[ret.id])
+        //     // ret.text = textLookup.good[ret.id];
+        // }
+        // if (bytes[3] == 0xC0) {
+        //     ret.type = "ashofwar";
+        //     // ret.params = ashofwar.find(ash => ash.RowID == ret.id);
 
-            // if (textLookup.good[ret.id])
-            // ret.text = textLookup.good[ret.id];
-        }
-        if (bytes[3] == 0xC0) {
-            ret.type = "ashofwar";
-            // ret.params = ashofwar.find(ash => ash.RowID == ret.id);
-
-            // if (textLookup.ashofwar[ret.id])
-            // ret.text = textLookup.ashofwar[ret.id];
-        }
-        // Object.defineProperty(ret, 'params', { enumerable: false });
-        // Object.defineProperty(ret, 'text', { enumerable: false });
+        //     // if (textLookup.ashofwar[ret.id])
+        //     // ret.text = textLookup.ashofwar[ret.id];
+        // }
+        // // Object.defineProperty(ret, 'params', { enumerable: false });
+        // // Object.defineProperty(ret, 'text', { enumerable: false });
 
         return ret;
     }

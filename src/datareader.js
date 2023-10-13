@@ -1,29 +1,60 @@
 class DataReader {
     constructor(data) {
-        this.data = new Uint8Array(data);
-        this.view = new DataView(data);
         this.offset = 0;
+        if (data instanceof ArrayBuffer) {
+            this.data = new Uint8Array(data);
+            this.view = new DataView(data);
+            this.isBuffer = false;
+        }
+        if (data instanceof Buffer) {
+            this.data = data;
+            this.isBuffer = true;
+        }
     }
 
-    read(len, consume = true) {
-        let data = this.data.slice(this.offset, this.offset + len);
-        if (consume)
-            this.offset += len;
-        return data;
+    read(length, consume = true) {
+        if (!this.isBuffer) {
+            let data = this.data.slice(this.offset, this.offset + length);
+            if (consume)
+                this.offset += length;
+            return data;
+        } else {
+            const result = this.data.subarray(this.offset, this.offset + length);
+            if (consume) {
+                this.offset += length;
+            }
+            return result;
+        }
     }
 
     readInt32(consume = true) {
-        let ret = this.view.getInt32(this.offset, true);
-        if (consume)
-            this.offset += 4;
-        return ret;
+        if (!this.isBuffer) {
+            let ret = this.view.getInt32(this.offset, true);
+            if (consume)
+                this.offset += 4;
+            return ret;
+        } else {
+            const result = this.data.readInt32LE(this.offset);
+            if (consume) {
+                this.offset += 4;
+            }
+            return result;
+        }
     }
 
     readUint32(consume = true) {
-        let ret = this.view.getUint32(this.offset, true);
-        if (consume)
-            this.offset += 4;
-        return ret;
+        if (!this.isBuffer) {
+            let ret = this.view.getUint32(this.offset, true);
+            if (consume)
+                this.offset += 4;
+            return ret;
+        } else {
+            const result = this.data.readUInt32LE(this.offset);
+            if (consume) {
+                this.offset += 4;
+            }
+            return result;
+        }
     }
 
     seek(offset, relative = false) {

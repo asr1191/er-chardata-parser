@@ -1,5 +1,6 @@
 import { DataReader } from './datareader.js'
 import { Buffer } from 'buffer'
+import { ms2time } from './util.js';
 
 class SaveData {
     constructor(data) {
@@ -22,7 +23,6 @@ class SaveData {
                 if (slotsManifestBuffer.readInt8(index) == 1) {
                     const slotBuffer = new DataReader(this.getSlotBuffer(data, index));
                     this.characters[index] = new CharacterData(slotBuffer);
-
                 }
             }
         }
@@ -47,13 +47,19 @@ class SaveData {
 class CharacterData {
     constructor(dataReader) {
         this.dataReader = dataReader;
-        Object.defineProperty(this, 'reader', { enumerable: false });
+        Object.defineProperty(this, 'dataReader', { enumerable: false });
+
+        this.internal = {};
+        Object.defineProperty(this, 'internal', { enumerable: false });
+
         dataReader.seek(0x10);
         this.version = dataReader.readInt32();
-        dataReader.seek(0x04, true);
-        this.timePlayed = dataReader.readInt32();
-        dataReader.seek(0x04, true);
 
+        dataReader.seek(0x04, true);
+        this.internal.timePlayed = dataReader.readInt32();
+        this.timePlayed = ms2time(this.internal.timePlayed);
+
+        dataReader.seek(0x04, true);
         if (this.version > 0x51) { // Newer versions have an extra 16 bytes of padding
             dataReader.seek(0x10, true);
         }
@@ -62,11 +68,8 @@ class CharacterData {
             dataReader.skipLookupEntry();
         }
 
-        this.internal = {};
-        Object.defineProperty(this, 'internal', { enumerable: false });
 
         dataReader.seek(0x94, true) // DOGE SKIP SHIT
-
         const nameString = dataReader.read(0x20, true).toString('utf16le');
         this.internal.name = nameString.indexOf('\0') == -1 ? nameString : nameString.slice(0, nameString.indexOf('\0'));
 

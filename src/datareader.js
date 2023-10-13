@@ -14,7 +14,6 @@ class DataReader {
 
     readInt32(consume = true) {
         let ret = this.view.getInt32(this.offset, true);
-
         if (consume)
             this.offset += 4;
         return ret;
@@ -22,7 +21,6 @@ class DataReader {
 
     readUint32(consume = true) {
         let ret = this.view.getUint32(this.offset, true);
-
         if (consume)
             this.offset += 4;
         return ret;
